@@ -6,16 +6,48 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **Disney Plus Clone** streaming platform built as a **monorepo** with separate frontend and backend workspaces. The frontend is a Next.js 15 application with modern UI components, while the backend is an Express.js API.
 
+**GitHub Repository**: https://github.com/kydogg/disney-plus
+**Current Branch**: develop (default development branch)
+
+### Workspace-Specific Documentation
+
+For detailed workspace-specific guidance:
+- **Frontend**: See `frontend/CLAUDE.md` for Next.js, React, and UI development
+- **Backend**: See `backend/CLAUDE.md` for Express.js, API, and server development
+- **Root**: This file (monorepo structure, workflows, deployment)
+
 ## Monorepo Structure
 
 ```
 disney-plus/
-├── frontend/          # Next.js 15 app with App Router
-├── backend/           # Express.js API
-└── package.json       # Root workspace configuration
+├── frontend/                      # Next.js 15 app with App Router
+│   ├── app/                      # Next.js pages (App Router)
+│   ├── components/               # React components
+│   │   └── ui/                  # shadcn/ui components
+│   ├── lib/                      # Utility functions
+│   ├── __tests__/                # Jest tests
+│   ├── public/                   # Static assets
+│   ├── CLAUDE.md                # Frontend-specific docs
+│   └── package.json             # Frontend dependencies
+├── backend/                       # Express.js API
+│   ├── src/                      # Source code
+│   │   └── index.ts            # Main entry point
+│   ├── test/                     # Vitest tests
+│   ├── CLAUDE.md                # Backend-specific docs
+│   └── package.json             # Backend dependencies
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml              # CI/CD pipeline
+│   │   └── coderabbit.yml      # CodeRabbit AI integration
+│   └── pull_request_template.md
+├── CLAUDE.md                     # This file (root documentation)
+├── BRANCHING_STRATEGY.md        # Git Flow workflow guide
+├── README.md                     # Project quick start
+├── .gitignore                    # Root gitignore
+└── package.json                  # Root workspace configuration
 ```
 
-This is an **npm workspaces** monorepo. Each workspace has its own package.json and can be developed independently.
+This is an **npm workspaces** monorepo. Each workspace has its own package.json and can be developed independently. All dependencies are hoisted to the root `node_modules` for efficiency.
 
 ## Commands
 
@@ -356,13 +388,35 @@ CodeRabbit is configured to:
 - **Start Command**: `npm start`
 - **Environment Variables**: Set in platform dashboard
 
-## Known Issues / TODOs
+## Project Status
 
-- [ ] Set up CI/CD pipeline
+### Completed ✅
+- [x] Monorepo structure with npm workspaces
+- [x] Frontend: Next.js 15 + Tailwind CSS + shadcn/ui
+- [x] Backend: Express.js + TypeScript
+- [x] Testing frameworks (Jest + Vitest)
+- [x] Git Flow with develop branch
+- [x] GitHub Actions CI/CD pipeline
+- [x] CodeRabbit integration configured
+- [x] Comprehensive documentation
+- [x] Repository pushed to GitHub
+
+### In Progress 🚧
+- [ ] Implement database layer (Prisma/MongoDB)
+- [ ] Add authentication system
+- [ ] Create movie API endpoints
+- [ ] Build video player component
+- [ ] Design homepage layout
+
+### Planned 📋
 - [ ] Add E2E tests with Playwright
-- [ ] Configure CodeRabbit settings
 - [ ] Set up error tracking (Sentry)
-- [ ] Add API documentation (Swagger)
+- [ ] Add API documentation (Swagger/OpenAPI)
+- [ ] Implement file upload for videos/images
+- [ ] Add user profiles and watchlists
+- [ ] Implement search functionality
+- [ ] Add video streaming optimization
+- [ ] Deploy to production (Vercel + Railway/Render)
 
 ## Getting Help
 
@@ -371,10 +425,39 @@ CodeRabbit is configured to:
 - Check GitHub issues for known problems
 - Use CodeRabbit feedback to improve code quality
 
+## Development Principles
+
+### Code Quality Standards
+1. **Test-Driven Development**: Write tests BEFORE or WITH implementation
+2. **Type Safety**: Use TypeScript strictly, avoid `any` types
+3. **Code Review**: All code goes through PR + CodeRabbit review
+4. **Clean Code**: Follow SOLID principles, keep functions small
+5. **Documentation**: Document complex logic with comments
+
+### Performance Principles
+1. **Frontend**: Server Components by default, Client Components only when needed
+2. **Backend**: Implement caching strategies for frequently accessed data
+3. **Images**: Always use Next.js Image component for optimization
+4. **Database**: Index frequently queried fields, use connection pooling
+5. **API**: Implement pagination for list endpoints
+
+### Security Principles
+1. **Input Validation**: Always validate and sanitize user input
+2. **Authentication**: Implement secure token-based authentication
+3. **Authorization**: Check permissions before operations
+4. **Environment Variables**: Never commit secrets, use environment variables
+5. **CORS**: Configure CORS properly for production
+
 ## Recent Changes
 
+**October 30, 2024**
 - ✅ Initial monorepo setup complete
 - ✅ Frontend: Next.js 15 + Tailwind + shadcn/ui configured
 - ✅ Backend: Express.js + TypeScript configured
-- ✅ Testing frameworks configured
+- ✅ Testing frameworks configured (Jest + Vitest)
 - ✅ Git Flow with develop branch established
+- ✅ GitHub repository created and pushed
+- ✅ CI/CD pipeline configured with GitHub Actions
+- ✅ CodeRabbit integration set up
+- ✅ Comprehensive documentation (3 CLAUDE.md files)
+- ✅ PR template and workflows configured
