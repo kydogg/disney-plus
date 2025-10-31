@@ -4,7 +4,9 @@ import SearchPage from '@/app/search/[term]/page';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
-  notFound: jest.fn(),
+  notFound: jest.fn(() => {
+    throw new Error('NEXT_NOT_FOUND');
+  }),
 }));
 
 describe('SearchPage', () => {
@@ -12,43 +14,45 @@ describe('SearchPage', () => {
     jest.clearAllMocks();
   });
 
-  it('displays the search term', () => {
+  it('displays the search term', async () => {
     const props = {
-      params: { term: 'avengers' },
+      params: Promise.resolve({ term: 'avengers' }),
     };
 
-    render(<SearchPage {...props} />);
+    render(await SearchPage(props));
 
     expect(screen.getByText(/welcome to the search page: avengers/i)).toBeInTheDocument();
   });
 
-  it('calls notFound when term is empty', () => {
+  it('calls notFound when term is empty', async () => {
     const props = {
-      params: { term: '' },
+      params: Promise.resolve({ term: '' }),
     };
 
-    render(<SearchPage {...props} />);
+    await expect(async () => {
+      await SearchPage(props);
+    }).rejects.toThrow('NEXT_NOT_FOUND');
 
     expect(notFound).toHaveBeenCalledTimes(1);
   });
 
-  it('does not call notFound when term is provided', () => {
+  it('does not call notFound when term is provided', async () => {
     const props = {
-      params: { term: 'avengers' },
+      params: Promise.resolve({ term: 'avengers' }),
     };
 
-    render(<SearchPage {...props} />);
+    render(await SearchPage(props));
 
     expect(notFound).not.toHaveBeenCalled();
   });
 
-  it('handles URI encoded search terms', () => {
+  it('handles URI encoded search terms', async () => {
     const props = {
-      params: { term: 'iron%20man' },
+      params: Promise.resolve({ term: 'iron%20man' }),
     };
 
-    render(<SearchPage {...props} />);
+    render(await SearchPage(props));
 
-    expect(screen.getByText(/iron%20man/i)).toBeInTheDocument();
+    expect(screen.getByText(/iron man/i)).toBeInTheDocument();
   });
 });

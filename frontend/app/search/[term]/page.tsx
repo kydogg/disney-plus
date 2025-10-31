@@ -1,7 +1,4 @@
-"use client";
-
 import { notFound } from "next/navigation";
-import { use } from "react";
 
 type Props = {
 	params: Promise<{
@@ -9,8 +6,8 @@ type Props = {
 	}>;
 };
 
-function SearchPage({ params }: Props) {
-	const { term } = use(params);
+async function SearchPage({ params }: Props) {
+	const { term } = await params;
 	if (!term) notFound();
 	const termToUse = decodeURI(term);
 

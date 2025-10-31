@@ -1,36 +1,36 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import GenrePage from '@/app/genre/[id]/page';
 
 describe('GenrePage', () => {
-  it('displays genre ID from params', () => {
+  it('displays genre ID from params', async () => {
     const props = {
-      params: { id: '28' },
-      searchParams: { genre: 'Action' },
+      params: Promise.resolve({ id: '28' }),
+      searchParams: Promise.resolve({ genre: 'Action' }),
     };
 
-    render(<GenrePage {...props} />);
+    render(await GenrePage(props));
 
     expect(screen.getByText(/ID: 28/i)).toBeInTheDocument();
   });
 
-  it('displays genre name from searchParams', () => {
+  it('displays genre name from searchParams', async () => {
     const props = {
-      params: { id: '28' },
-      searchParams: { genre: 'Action' },
+      params: Promise.resolve({ id: '28' }),
+      searchParams: Promise.resolve({ genre: 'Action' }),
     };
 
-    render(<GenrePage {...props} />);
+    render(await GenrePage(props));
 
     expect(screen.getByText(/name: Action/i)).toBeInTheDocument();
   });
 
-  it('handles different genre values', () => {
+  it('handles different genre values', async () => {
     const props = {
-      params: { id: '35' },
-      searchParams: { genre: 'Comedy' },
+      params: Promise.resolve({ id: '35' }),
+      searchParams: Promise.resolve({ genre: 'Comedy' }),
     };
 
-    render(<GenrePage {...props} />);
+    render(await GenrePage(props));
 
     expect(screen.getByText(/ID: 35/i)).toBeInTheDocument();
     expect(screen.getByText(/name: Comedy/i)).toBeInTheDocument();
