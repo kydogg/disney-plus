@@ -1,13 +1,16 @@
 type Props = {
-	params: {
+	params: Promise<{
 		id: string;
-	};
-	searchParams: {
+	}>;
+	searchParams: Promise<{
 		genre: string;
-	};
+	}>;
 };
 
-function GenrePage({ params: { id }, searchParams: { genre } }: Props) {
+async function GenrePage({ params, searchParams }: Props) {
+	const { id } = await params;
+	const { genre } = await searchParams;
+
 	return (
 		<div>
 			Welcome to the genre with ID: {id} and name: {genre}
