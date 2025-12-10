@@ -1,20 +1,21 @@
 import { InvocationContext } from '@azure/functions';
-import { getAISuggestionYoutube } from '../src/functions/getAISuggestion';
 
-// Mock OpenAI
+// Mock OpenAI before importing the function
+const mockCreate = jest.fn();
 jest.mock('openai', () => {
   return jest.fn().mockImplementation(() => ({
     chat: {
       completions: {
-        create: jest.fn(),
+        create: (...args: any[]) => mockCreate(...args),
       },
     },
   }));
 });
 
+import { getAISuggestionYoutube } from '../src/functions/getAISuggestion';
+
 describe('getAISuggestionYoutube', () => {
   let mockContext: InvocationContext;
-  let mockOpenAI: any;
 
   beforeEach(() => {
     // Mock InvocationContext
@@ -23,9 +24,7 @@ describe('getAISuggestionYoutube', () => {
       error: jest.fn(),
     } as any;
 
-    // Reset OpenAI mock
-    const OpenAI = require('openai');
-    mockOpenAI = new OpenAI();
+    // Reset mocks
     jest.clearAllMocks();
   });
 
@@ -47,7 +46,7 @@ describe('getAISuggestionYoutube', () => {
       ],
     };
 
-    mockOpenAI.chat.completions.create.mockResolvedValue(mockCompletion);
+    mockCreate.mockResolvedValue(mockCompletion);
 
     const result = await getAISuggestionYoutube(mockRequest, mockContext);
 
@@ -71,7 +70,7 @@ describe('getAISuggestionYoutube', () => {
 
     expect(result.status).toBe(400);
     expect(result.body).toBe("Please provide a 'term' query parameter");
-    expect(mockOpenAI.chat.completions.create).not.toHaveBeenCalled();
+    expect(mockCreate).not.toHaveBeenCalled();
   });
 
   it('returns 400 when term is empty string', async () => {
@@ -97,7 +96,7 @@ describe('getAISuggestionYoutube', () => {
     } as any;
 
     const mockError = new Error('OpenAI API rate limit exceeded');
-    mockOpenAI.chat.completions.create.mockRejectedValue(mockError);
+    mockCreate.mockRejectedValue(mockError);
 
     const result = await getAISuggestionYoutube(mockRequest, mockContext);
 
@@ -125,7 +124,7 @@ describe('getAISuggestionYoutube', () => {
       ],
     };
 
-    mockOpenAI.chat.completions.create.mockResolvedValue(mockCompletion);
+    mockCreate.mockResolvedValue(mockCompletion);
 
     await getAISuggestionYoutube(mockRequest, mockContext);
 
@@ -146,11 +145,11 @@ describe('getAISuggestionYoutube', () => {
       choices: [{ message: { content: 'Test suggestions' } }],
     };
 
-    mockOpenAI.chat.completions.create.mockResolvedValue(mockCompletion);
+    mockCreate.mockResolvedValue(mockCompletion);
 
     await getAISuggestionYoutube(mockRequest, mockContext);
 
-    expect(mockOpenAI.chat.completions.create).toHaveBeenCalledWith({
+    expect(mockCreate).toHaveBeenCalledWith({
       model: 'gpt-3.5-turbo',
       messages: [
         {
@@ -177,7 +176,7 @@ describe('getAISuggestionYoutube', () => {
       choices: [{ message: { content: 'Drama suggestions' } }],
     };
 
-    mockOpenAI.chat.completions.create.mockResolvedValue(mockCompletion);
+    mockCreate.mockResolvedValue(mockCompletion);
 
     const result = await getAISuggestionYoutube(mockRequest, mockContext);
 
@@ -198,7 +197,7 @@ describe('getAISuggestionYoutube', () => {
       choices: [{ message: { content: null } }],
     };
 
-    mockOpenAI.chat.completions.create.mockResolvedValue(mockCompletion);
+    mockCreate.mockResolvedValue(mockCompletion);
 
     const result = await getAISuggestionYoutube(mockRequest, mockContext);
 

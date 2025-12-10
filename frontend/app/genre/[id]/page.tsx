@@ -2,16 +2,18 @@ import MoviesCarousel from "@/components/MoviesCarousel";
 import { getDiscoverMovies } from "@/lib/getMovies";
 
 type Props = {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 
-	searchParams: {
+	searchParams: Promise<{
 		genre: string;
-	};
+	}>;
 };
 
-async function GenrePage({ params: { id }, searchParams: { genre } }: Props) {
+async function GenrePage({ params, searchParams }: Props) {
+	const { id } = await params;
+	const { genre } = await searchParams;
 	const movies = await getDiscoverMovies(id);
 
 	return (
