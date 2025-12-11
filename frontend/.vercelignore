@@ -1,0 +1,28 @@
+# Azure Function (deployed separately to Azure)
+function/
+function/**/*
+
+# Tests (not needed in production)
+__tests__/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+jest.config.js
+jest.setup.js
+
+# Development files
+.vscode/
+.idea/
+*.md
+!README.md
+
+# CI/CD
+.github/
+
+# Local environment
+.env.local
+.env*.local
+
+# Build artifacts
+.next/cache/
