@@ -42,16 +42,16 @@ describe('Header', () => {
   it('renders the Disney logo', () => {
     render(<Header />);
 
-    const logo = screen.getByAltText('');
+    const logo = screen.getByAltText('Disney Logo');
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute('src', 'https://links.papareact.com/a943ae');
   });
 
-  it('logo links to /home', () => {
+  it('logo links to home page', () => {
     render(<Header />);
 
     const logoLink = screen.getByRole('link');
-    expect(logoLink).toHaveAttribute('href', '/home');
+    expect(logoLink).toHaveAttribute('href', '/');
   });
 
   it('renders GenreDropdown component', () => {
@@ -92,7 +92,7 @@ describe('Header', () => {
   it('logo has correct dimensions', () => {
     render(<Header />);
 
-    const logo = screen.getByAltText('');
+    const logo = screen.getByAltText('Disney Logo');
     expect(logo).toHaveAttribute('width', '120');
     expect(logo).toHaveAttribute('height', '100');
   });
@@ -100,7 +100,7 @@ describe('Header', () => {
   it('logo has dark mode invert class', () => {
     render(<Header />);
 
-    const logo = screen.getByAltText('');
+    const logo = screen.getByAltText('Disney Logo');
     expect(logo).toHaveClass('invert-0', 'dark:invert');
   });
 });
